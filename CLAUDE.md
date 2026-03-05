@@ -23,6 +23,19 @@ cursor-style = block
 cursor-style-blink
 ```
 
+## Updating the Config Reference
+
+When Ghostty releases a new version with new or changed configuration options,
+regenerate the Config Reference section by running:
+
+```sh
+python update_docs.py
+```
+
+This script runs `ghostty +show-config --default --docs`, applies the Markdown
+transformation, and replaces everything after the `---` separator — preserving
+this header section intact. Review the diff, then commit.
+
 ## Config Reference
 
 The sections below document every available Ghostty configuration option with
@@ -34,9 +47,7 @@ The font families to use.
 
 You can generate the list of valid values using the CLI:
 
-```
     ghostty +list-fonts
-```
 
 This configuration can be repeated multiple times to specify preferred
 fallback fonts when the requested codepoint is not available in the primary
@@ -71,10 +82,8 @@ If you want to overwrite a previous set value rather than append a fallback,
 specify the value as `""` (empty string) to reset the list and then set the
 new values. For example:
 
-```
     font-family = ""
     font-family = "My Favorite Font"
-```
 
 Setting any of these as CLI arguments will automatically clear the
 values set in configuration files so you don't need to specify
@@ -82,9 +91,6 @@ values set in configuration files so you don't need to specify
 this within config files if you want to clear previously set values in
 configuration files or on the CLI if you want to clear values set on the
 CLI.
-
-## Font & Typography
-
 Default: `font-family = `
 
 
@@ -157,9 +163,7 @@ The syntax for feature settings is as follows, where `feat` is a feature:
   * Disabled features with e.g. `-feat`, `feat off`, `feat=0`.
   * Set a feature value with e.g. `feat=2`, `feat = 3`, `feat 4`.
   * Feature names may be wrapped in quotes, meaning this config should be
-```
     syntactically compatible with the `font-feature-settings` CSS property.
-```
 
 The syntax is fairly loose, but invalid settings will be silently ignored.
 
@@ -331,14 +335,10 @@ adjustments cannot go below 1px.
   * The font will be centered vertically in the cell.
 
   * The cursor will remain the same size as the font, but may be
-```
     adjusted separately with `adjust-cursor-height`.
-```
 
   * Powerline glyphs will be adjusted along with the cell height so
-```
     that things like status lines continue to look aligned.
-```
 Default: `adjust-cell-width = `
 
 
@@ -458,15 +458,11 @@ Available flags:
   * `hinting` - Enable or disable hinting. Enabled by default.
 
   * `force-autohint` - Always use the freetype auto-hinter instead of
-```
     the font's native hinter. Disabled by default.
-```
 
   * `monochrome` - Instructs renderer to use 1-bit monochrome rendering.
-```
     This will disable anti-aliasing, and probably not look very good unless
     you're using a pixel font. Disabled by default.
-```
 
   * `autohint` - Enable the freetype auto-hinter. Enabled by default.
 
@@ -527,9 +523,6 @@ There are some known bugs with light/dark mode theming. These will
 be fixed in a future update:
 
   - macOS: titlebar tabs style is not updated when switching themes.
-
-## Colors & Theme
-
 Default: `theme = `
 
 
@@ -608,32 +601,24 @@ Valid values are:
 
  * `contain`
 
-```
    Preserving the aspect ratio, scale the background image to the largest
    size that can still be contained within the terminal, so that the whole
    image is visible.
-```
 
  * `cover`
 
-```
    Preserving the aspect ratio, scale the background image to the smallest
    size that can completely cover the terminal. This may result in one or
    more edges of the image being clipped by the edge of the terminal.
-```
 
  * `stretch`
 
-```
    Stretch the background image to the full size of the terminal, without
    preserving the aspect ratio.
-```
 
  * `none`
 
-```
    Don't scale the background image.
-```
 
 The default value is `contain`.
 
@@ -1243,17 +1228,10 @@ Additionally, special values can be used to set the color to match
 other colors at runtime:
 
   * `cell-foreground` - Match the cell foreground color.
-```
     (Available since: 1.2.0)
-```
 
   * `cell-background` - Match the cell background color.
-```
     (Available since: 1.2.0)
-```
-
-## Cursor
-
 Default: `cursor-color = `
 
 
@@ -1332,9 +1310,6 @@ Hide the mouse immediately when typing. The mouse becomes visible again
 when the mouse is used (button, movement, etc.). Platform-specific behavior
 may dictate other scenarios where the mouse is shown. For example on macOS,
 the mouse is shown again when a new window, tab, or split is created.
-
-## Mouse & Scrolling
-
 Default: `mouse-hide-while-typing = false`
 
 
@@ -1435,10 +1410,8 @@ Valid values are:
   * a nonnegative integer specifying the *blur intensity*
   * `false`, equivalent to a blur intensity of 0
   * `true`, equivalent to the default blur intensity of 20, which is
-```
     reasonable for a good looking blur. Higher blur intensities may
     cause strange rendering and performance issues.
-```
 
 Supported on macOS and on some Linux desktop environments, including:
 
@@ -1473,9 +1446,6 @@ A value of 1 is fully opaque and a value of 0 is fully transparent. Because
 is 0.15. This value still looks weird but you can at least see what's going
 on. A value outside of the range 0.15 to 1 will be clamped to the nearest
 valid value.
-
-## Background & Splits
-
 Default: `unfocused-split-opacity = 0.7`
 
 
@@ -1525,9 +1495,6 @@ Ghostty supports the common `-e` flag for executing a command with
 arguments. For example, `ghostty -e fish --with --custom --args`.
 This flag sets the `initial-command` configuration, see that for more
 information.
-
-## Shell & Environment
-
 Default: `command = `
 
 
@@ -1546,24 +1513,17 @@ fish --with --custom --args`. The `-e` flag automatically forces some
 other behaviors as well:
 
   * Disables shell expansion since the input is expected to already
-```
     be shell-expanded by the upstream (e.g. the shell used to type in
     the `ghostty -e` command).
-```
 
   * `gtk-single-instance=false` - This ensures that a new instance is
-```
     launched and the CLI args are respected.
-```
 
   * `quit-after-last-window-closed=true` - This ensures that the Ghostty
-```
     process will exit when the command exits. Additionally, the
     `quit-after-last-window-closed-delay` is unset.
-```
 
   * `shell-integration=detect` (if not `none`) - This prevents forcibly
-```
     injecting any configured shell integration into the command's
     environment. With `-e` its highly unlikely that you're executing a
     shell and forced shell integration is likely to cause problems
@@ -1572,7 +1532,6 @@ other behaviors as well:
     shell integration with a `-e`-executed command, you must either
     name your binary appropriately or source the shell integration script
     manually.
-```
 Default: `initial-command = `
 
 
@@ -1628,20 +1587,16 @@ can be used to execute programs in a shell.
 The format of this value is:
 
   * `raw:<string>` - Send raw text as-is. This uses Zig string literal
-```
     syntax so you can specify control characters and other standard
     escapes.
-```
 
   * `path:<path>` - Read a filepath and send the contents. The path
-```
     must be to a file with finite length. e.g. don't use a device
     such as `/dev/stdin` or `/dev/urandom` as these will block
     terminal startup indefinitely. Files are limited to 10MB
     in size to prevent excessive memory usage. If you have files
     larger than this you should write a script to read the file
     and send it to the terminal.
-```
 
 If no valid prefix is found, it is assumed to be a `raw:` input.
 This is an ergonomic choice to allow you to simply write
@@ -1888,9 +1843,7 @@ Some additional notes for triggers:
   * modifiers cannot repeat, `ctrl+ctrl+a` is invalid.
 
   * modifiers and keys can be in any order, `shift+a+ctrl` is *weird*,
-```
     but valid.
-```
 
   * only a single key input is allowed, `ctrl+a+b` is invalid.
 
@@ -1908,124 +1861,91 @@ in most shells. Example: ghostty --keybind='ctrl+a>n=new_window'
 A trigger sequence has some special handling:
 
   * Ghostty will wait an indefinite amount of time for the next key in
-```
     the sequence. There is no way to specify a timeout. The only way to
     force the output of a prefix key is to assign another keybind to
     specifically output that key (e.g. `ctrl+a>ctrl+a=text:foo`) or
     press an unbound key which will send both keys to the program.
-```
 
   * If a prefix in a sequence is previously bound, the sequence will
-```
     override the previous binding. For example, if `ctrl+a` is bound to
     `new_window` and `ctrl+a>n` is bound to `new_tab`, pressing `ctrl+a`
     will do nothing.
-```
 
   * Adding to the above, if a previously bound sequence prefix is
-```
     used in a new, non-sequence binding, the entire previously bound
     sequence will be unbound. For example, if you bind `ctrl+a>n` and
     `ctrl+a>t`, and then bind `ctrl+a` directly, both `ctrl+a>n` and
     `ctrl+a>t` will become unbound.
-```
 
   * Trigger sequences are not allowed for `global:` or `all:`-prefixed
-```
     triggers. This is a limitation we could remove in the future.
-```
 
 Action is the action to take when the trigger is satisfied. It takes the
 format `action` or `action:param`. The latter form is only valid if the
 action requires a parameter.
 
   * `ignore` - Do nothing, ignore the key input. This can be used to
-```
     black hole certain inputs to have no effect.
-```
 
   * `unbind` - Remove the binding. This makes it so the previous action
-```
     is removed, and the key will be sent through to the child command
     if it is printable. Unbind will remove any matching trigger,
     including `physical:`-prefixed triggers without specifying the
     prefix.
-```
 
   * `csi:text` - Send a CSI sequence. e.g. `csi:A` sends "cursor up".
 
   * `esc:text` - Send an escape sequence. e.g. `esc:d` deletes to the
-```
     end of the word to the right.
-```
 
   * `text:text` - Send a string. Uses Zig string literal syntax.
-```
     e.g. `text:\x15` sends Ctrl-U.
-```
 
   * All other actions can be found in the documentation or by using the
-```
     `ghostty +list-actions` command.
-```
 
 Some notes for the action:
 
   * The parameter is taken as-is after the `:`. Double quotes or
-```
     other mechanisms are included and NOT parsed. If you want to
     send a string value that includes spaces, wrap the entire
     trigger/action in double quotes. Example: `--keybind="up=csi:A B"`
-```
 
 There are some additional special values that can be specified for
 keybind:
 
   * `keybind=clear` will clear all set keybindings. Warning: this
-```
     removes ALL keybindings up to this point, including the default
     keybindings.
-```
 
 The keybind trigger can be prefixed with some special values to change
 the behavior of the keybind. These are:
 
  * `all:`
 
-```
    Make the keybind apply to all terminal surfaces. By default,
    keybinds only apply to the focused terminal surface. If this is true,
    then the keybind will be sent to all terminal surfaces. This only
    applies to actions that are surface-specific. For actions that
    are already global (e.g. `quit`), this prefix has no effect.
-```
 
-```
    Available since: 1.0.0
-```
 
  * `global:`
 
-```
    Make the keybind global. By default, keybinds only work within Ghostty
    and under the right conditions (application focused, sometimes terminal
    focused, etc.). If you want a keybind to work globally across your system
    (e.g. even when Ghostty is not focused), specify this prefix.
    This prefix implies `all:`.
-```
 
-```
    Note: this does not work in all environments; see the additional notes
    below for more information.
-```
 
-```
    Available since: 1.0.0 on macOS, 1.2.0 on GTK
-```
 
  * `unconsumed:`
 
-```
    Do not consume the input. By default, a keybind will consume the input,
    meaning that the associated encoding (if any) will not be sent to the
    running program in the terminal. If you wish to send the encoded value
@@ -2034,15 +1954,11 @@ the behavior of the keybind. These are:
    `all:`-prefixed keybinds will always consume the input regardless of
    this setting. Since they are not associated with a specific terminal
    surface, they're never encoded.
-```
 
-```
    Available since: 1.0.0
-```
 
  * `performable:`
 
-```
    Only consume the input if the action is able to be performed.
    For example, the `copy_to_clipboard` action will only consume the input
    if there is a selection to copy. If there is no selection, Ghostty
@@ -2050,19 +1966,14 @@ the behavior of the keybind. These are:
    or `all:`-prefixed keybinds. For key sequences, this will reset the
    sequence if the action is not performable (acting identically to not
    having a keybind set at all).
-```
 
-```
    Performable keybinds will not appear as menu shortcuts in the
    application menu. This is because the menu shortcuts force the
    action to be performed regardless of the state of the terminal.
    Performable keybinds will still work, they just won't appear as
    a shortcut label in the menu.
-```
 
-```
    Available since: 1.1.0
-```
 
 Keybind triggers are not unique per prefix combination. For example,
 `ctrl+a` and `global:ctrl+a` are not two separate keybinds. The keybind
@@ -2089,26 +2000,17 @@ Desktop environments that are known to support (or not support)
 global shortcuts include:
 
  - Users using KDE Plasma (since [5.27](https://kde.org/announcements/plasma/5/5.27.0/#wayland))
-```
    and GNOME (since [48](https://release.gnome.org/48/#and-thats-not-all)) should be able
    to use global shortcuts with little to no configuration.
-```
 
  - Some manual configuration is required on Hyprland. Consult the steps
-```
    outlined on the [Hyprland Wiki](https://wiki.hyprland.org/Configuring/Binds/#dbus-global-shortcuts)
    to set up global shortcuts correctly.
    (Important: [`xdg-desktop-portal-hyprland`](https://wiki.hyprland.org/Hypr-Ecosystem/xdg-desktop-portal-hyprland/)
    must also be installed!)
-```
 
  - Notably, global shortcuts have not been implemented on wlroots-based
-```
    compositors like Sway (see [upstream issue](https://github.com/emersion/xdg-desktop-portal-wlr/issues/240)).
-```
-
-## Key Bindings
-
 Default: `keybind = super+shift+d=new_split:down`
 
 Default: `keybind = super+enter=toggle_fullscreen`
@@ -2299,9 +2201,6 @@ separated by a comma. For example, `window-padding-x = 2,4` will set the
 left padding to 2 and the right padding to 4. If you want to set both
 paddings to the same value, you can use a single value. For example,
 `window-padding-x = 2` will set both paddings to 2.
-
-## Window
-
 Default: `window-padding-x = 2`
 
 
@@ -2400,48 +2299,34 @@ Valid values:
 
  * `none`
 
-```
    All window decorations will be disabled. Titlebar, borders, etc. will
    not be shown. On macOS, this will also disable tabs (enforced by the
    system).
-```
 
  * `auto`
 
-```
    Automatically decide to use either client-side or server-side
    decorations based on the detected preferences of the current OS and
    desktop environment. This option usually makes Ghostty look the most
    "native" for your desktop.
-```
 
  * `client`
 
-```
    Prefer client-side decorations.
-```
 
-```
    Available since: 1.1.0
-```
 
  * `server`
 
-```
    Prefer server-side decorations. This is only relevant on Linux with GTK,
    either on X11, or Wayland on a compositor that supports the
    `org_kde_kwin_server_decoration` protocol (e.g. KDE Plasma, but almost
    any non-GNOME desktop supports this protocol).
-```
 
-```
    If `server` is set but the environment doesn't support server-side
    decorations, client-side decorations will be used instead.
-```
 
-```
    Available since: 1.1.0
-```
 
 The default value is `auto`.
 
@@ -2456,9 +2341,7 @@ The "toggle_window_decorations" keybind action can be used to create
 a keybinding to toggle this setting at runtime.
 
 macOS: To hide the titlebar without removing the native window borders
-```
        or rounded corners, use `macos-titlebar-style = hidden` instead.
-```
 Default: `window-decoration = auto`
 
 
@@ -2477,9 +2360,7 @@ The text that will be displayed in the subtitle of the window. Valid values:
 
   * `false` - Disable the subtitle.
   * `working-directory` - Set the subtitle to the working directory of the
-```
      surface.
-```
 
 This feature is only supported on GTK.
 
@@ -2490,18 +2371,14 @@ Default: `window-subtitle = false`
 The theme to use for the windows. Valid values:
 
   * `auto` - Determine the theme based on the configured terminal
-```
      background color. This has no effect if the "theme" configuration
      has separate light and dark themes. In that case, the behavior
      of "auto" is equivalent to "system".
-```
   * `system` - Use the system theme.
   * `light` - Use the light theme regardless of system theme.
   * `dark` - Use the dark theme regardless of system theme.
   * `ghostty` - Use the background and foreground colors specified in the
-```
     Ghostty configuration. This is only supported on Linux builds.
-```
 
 On macOS, if `macos-titlebar-style` is "tabs", the window theme will be
 automatically set based on the luminosity of the terminal background color.
@@ -2593,10 +2470,8 @@ for more information.
 There are three valid values for this configuration:
 
   * `default` will use the default system behavior. On macOS, this
-```
     will only save state if the application is forcibly terminated
     or if it is configured systemwide via Settings.app.
-```
 
   * `never` will never save window state.
 
@@ -2629,9 +2504,7 @@ Default: `window-step-resize = false`
 The position where new tabs are created. Valid values:
 
   * `current` - Insert the new tab after the currently focused tab,
-```
     or at the end if there are no focused tabs.
-```
 
   * `end` - Insert the new tab at the end of the tab list.
 Default: `window-new-tab-position = current`
@@ -2643,27 +2516,19 @@ Valid values:
 
  - `always`
 
-```
    Always display the tab bar, even when there's only one tab.
-```
 
-```
    Available since: 1.2.0
-```
 
  - `auto` *(default)*
 
-```
    Automatically show and hide the tab bar. The tab bar is only
    shown when there are two or more tabs present.
-```
 
  - `never`
 
-```
    Never show the tab bar. Tabs are only accessible via the tab
    overview or by keybind actions.
-```
 
 Currently only supported on Linux (GTK).
 Default: `window-show-tab-bar = auto`
@@ -2692,10 +2557,8 @@ being resized. The possible options are:
   * `always` - Always show resize overlays.
   * `never` - Never show resize overlays.
   * `after-first` - The resize overlay will not appear when the surface
-```
                     is first created, but will show up if the surface is
                     subsequently resized.
-```
 
 The default is `after-first`.
 Default: `resize-overlay = after-first`
@@ -2727,9 +2590,7 @@ be added together to form the total duration.
 The allowed time units are as follows:
 
   * `y` - 365 SI days, or 8760 hours, or 31536000 seconds. No adjustments
-```
     are made for leap years or leap seconds.
-```
   * `d` - one SI day, or 86400 seconds.
   * `h` - one hour, or 3600 seconds.
   * `m` - one minute, or 60 seconds.
@@ -2771,9 +2632,6 @@ Valid values are:
   * `ask`
   * `allow`
   * `deny`
-
-
-## Clipboard & Interactions
 
 Default: `clipboard-read = ask`
 
@@ -2841,9 +2699,7 @@ Valid values:
   * `paste` - Paste the contents of the clipboard.
   * `copy` - Copy the selected text to the clipboard.
   * `copy-or-paste` - If there is a selection, copy the selected text to
-```
      the clipboard; otherwise, paste the contents of the clipboard.
-```
   * `ignore` - Do nothing, ignore the right-click.
 
 The default value is `context-menu`.
@@ -2936,9 +2792,7 @@ be added together to form the total duration.
 The allowed time units are as follows:
 
   * `y` - 365 SI days, or 8760 hours, or 31536000 seconds. No adjustments
-```
     are made for leap years or leap seconds.
-```
   * `d` - one SI day, or 86400 seconds.
   * `h` - one hour, or 3600 seconds.
   * `m` - one minute, or 60 seconds.
@@ -2998,9 +2852,7 @@ be added together to form the total duration.
 The allowed time units are as follows:
 
   * `y` - 365 SI days, or 8760 hours, or 31536000 seconds. No adjustments
-```
     are made for leap years or leap seconds.
-```
   * `d` - one SI day, or 86400 seconds.
   * `h` - one hour, or 3600 seconds.
   * `m` - one minute, or 60 seconds.
@@ -3042,9 +2894,6 @@ completely.
 
 Note: There is no default keybind for toggling the quick terminal.
 To enable this feature, bind the `toggle_quick_terminal` action to a key.
-
-## Miscellaneous
-
 Default: `quick-terminal-position = top`
 
 
@@ -3077,36 +2926,25 @@ Valid values are:
 
  * `overlay`
 
-```
    The quick terminal appears in front of all windows.
-```
 
  * `top` (default)
 
-```
    The quick terminal appears in front of normal windows but behind
    fullscreen overlays like lock screens.
-```
 
  * `bottom`
 
-```
    The quick terminal appears behind normal windows but in front of
    wallpapers and other windows in the background layer.
-```
 
  * `background`
 
-```
    The quick terminal appears behind all windows.
-```
 
 GTK Wayland only.
 
 Available since: 1.2.0
-
-## Linux & GTK
-
 Default: `gtk-quick-terminal-layer = top`
 
 
@@ -3127,20 +2965,16 @@ The screen where the quick terminal should show up.
 Valid values are:
 
  * `main` - The screen that the operating system recommends as the main
-```
    screen. On macOS, this is the screen that is currently receiving
    keyboard input. This screen is defined by the operating system and
    not chosen by Ghostty.
-```
 
  * `mouse` - The screen that the mouse is currently hovered over.
 
  * `macos-menu-bar` - The screen that contains the macOS menu bar as
-```
    set in the display settings on macOS. This is a bit confusing because
    every screen on macOS has a menu bar, but this is the screen that
    contains the primary menu bar.
-```
 
 The default value is `main` because this is the recommended screen
 by the operating system.
@@ -3176,15 +3010,11 @@ application is in full-screen mode.
 Valid values are:
 
  * `move` - When switching to another space, the quick terminal will
-```
    also moved to the current space.
-```
 
  * `remain` - The quick terminal will stay only in the space where it
-```
    was originally opened and will not follow when switching to another
    space.
-```
 
 The default value is `move`.
 
@@ -3208,22 +3038,16 @@ Valid values are:
 
  * `none`
 
-```
    The quick terminal will not receive any keyboard input.
-```
 
  * `on-demand` (default)
 
-```
    The quick terminal would only receive keyboard input when it is focused.
-```
 
  * `exclusive`
 
-```
    The quick terminal will always receive keyboard input, even when another
    window is currently focused.
-```
 
 Only has an effect on Linux Wayland.
 On macOS the behavior is always equivalent to `on-demand`.
@@ -3236,28 +3060,20 @@ Whether to enable shell integration auto-injection or not. Shell integration
 greatly enhances the terminal experience by enabling a number of features:
 
   * Working directory reporting so new tabs, splits inherit the
-```
     previous terminal's working directory.
-```
 
   * Prompt marking that enables the "jump_to_prompt" keybinding.
 
   * If you're sitting at a prompt, closing a terminal will not ask
-```
     for confirmation.
-```
 
   * Resizing the window with a complex prompt usually paints much
-```
     better.
-```
 
 Allowable values are:
 
   * `none` - Do not do any automatic injection. You can still manually
-```
     configure your shell to enable the integration.
-```
 
   * `detect` - Detect the shell based on the filename.
 
@@ -3286,16 +3102,13 @@ Available features:
   * `title` - Set the window title via shell integration.
 
   * `ssh-env` - Enable SSH environment variable compatibility. Automatically
-```
     converts TERM from `xterm-ghostty` to `xterm-256color` when connecting to
     remote hosts and propagates COLORTERM, TERM_PROGRAM, and TERM_PROGRAM_VERSION.
     Whether or not these variables will be accepted by the remote host(s) will
     depend on whether or not the variables are allowed in their sshd_config.
     (Available since: 1.2.0)
-```
 
   * `ssh-terminfo` - Enable automatic terminfo installation on remote hosts.
-```
     Attempts to install Ghostty's terminfo entry using `infocmp` and `tic` when
     connecting to hosts that lack it. Requires `infocmp` to be available locally
     and `tic` to be available on remote hosts. Once terminfo is installed on a
@@ -3303,14 +3116,11 @@ Available features:
     If desired, the `+ssh-cache` CLI action can be used to manage the installation
     cache manually using various arguments.
     (Available since: 1.2.0)
-```
 
   * `path` - Add Ghostty's binary directory to PATH. This ensures the `ghostty`
-```
     command is available in the shell even if shell init scripts reset PATH.
     This is particularly useful on macOS where PATH is often overridden by
     system scripts. The directory is only added if not already present.
-```
 
 SSH features work independently and can be combined for optimal experience:
 when both `ssh-env` and `ssh-terminfo` are enabled, Ghostty will install its
@@ -3353,9 +3163,6 @@ command-palette-entry =
 ```
 
 Available since: 1.2.0
-
-## Command Palette
-
 Default: `command-palette-entry = title:"Change Title...",description:"Prompt for a new title for the current terminal.",action:"prompt_surface_title"`
 
 Default: `command-palette-entry = title:"Check for Updates",description:"Check for updates to the application.",action:"check_for_updates"`
@@ -3496,9 +3303,6 @@ Allowable values are:
   * `16-bit` - Color components are returned scaled, e.g. `rrrr/gggg/bbbb`
 
 The default value is `16-bit`.
-
-## Terminal Protocol & Shaders
-
 Default: `osc-color-report-format = 16-bit`
 
 
@@ -3526,11 +3330,9 @@ The uniform values available to shaders are as follows:
 
  * `sampler2D iChannel0` - Input texture.
 
-```
    A texture containing the current terminal screen. If multiple custom
    shaders are specified, the output of previous shaders is written to
    this texture, to allow combining multiple effects.
-```
 
  * `vec3 iResolution` - Output texture size, `[width, height, 1]` (in px).
 
@@ -3546,10 +3348,8 @@ The uniform values available to shaders are as follows:
 
  * `vec3 iChannelResolution[4]` - Resolutions of the 4 input samplers.
 
-```
    Currently only `iChannel0` exists, and `iChannelResolution[0]` is
    identical to `iResolution`.
-```
 
  * `vec4 iMouse` - Mouse input info. (NOT CURRENTLY SUPPORTED)
 
@@ -3561,10 +3361,8 @@ Ghostty-specific extensions:
 
  * `vec4 iCurrentCursor` - Info about the terminal cursor.
 
-```
    - `iCurrentCursor.xy` is the -X, +Y corner of the current cursor.
    - `iCurrentCursor.zw` is the width and height of the current cursor.
-```
 
  * `vec4 iPreviousCursor` - Info about the previous terminal cursor.
 
@@ -3574,11 +3372,9 @@ Ghostty-specific extensions:
 
  * `float iTimeCursorChange` - Timestamp of terminal cursor change.
 
-```
    When the terminal cursor changes position or color, this is set to
    the same time as the `iTime` uniform, allowing you to compute the
    time since the change by subtracting this from `iTime`.
-```
 
 If the shader fails to compile, the shader will be ignored. Any errors
 related to shader compilation will not show up as configuration errors
@@ -3621,71 +3417,48 @@ Valid values are:
 
  * `system`
 
-```
    Instruct the system to notify the user using built-in system functions.
    This could result in an audiovisual effect, a notification, or something
    else entirely. Changing these effects require altering system settings:
    for instance under the "Sound > Alert Sound" setting in GNOME,
    or the "Accessibility > System Bell" settings in KDE Plasma. (GTK only)
-```
 
  * `audio`
 
-```
    Play a custom sound. (GTK only)
-```
 
  * `attention` *(enabled by default)*
 
-```
    Request the user's attention when Ghostty is unfocused, until it has
    received focus again. On macOS, this will bounce the app icon in the
    dock once. On Linux, the behavior depends on the desktop environment
    and/or the window manager/compositor:
-```
 
-```
    - On KDE, the background of the desktop icon in the task bar would be
      highlighted;
-```
 
-```
    - On GNOME, you may receive a notification that, when clicked, would
      bring the Ghostty window into focus;
-```
 
-```
    - On Sway, the window may be decorated with a distinctly colored border;
-```
 
-```
    - On other systems this may have no effect at all.
-```
 
  * `title` *(enabled by default)*
 
-```
    Prepend a bell emoji (🔔) to the title of the alerted surface until the
    terminal is re-focused or interacted with (such as on keyboard input).
-```
 
  * `border`
 
-```
    Display a border around the alerted surface until the terminal is
    re-focused or interacted with (such as on keyboard input).
-```
 
-```
    GTK only.
-```
 
 Example: `audio`, `no-audio`, `system`, `no-system`
 
 Available since: 1.2.0
-
-## Bell & Notifications
-
 Default: `bell-features = no-system,no-audio,attention,title,no-border`
 
 
@@ -3717,13 +3490,9 @@ that is not critical but may be important.
 Possible notifications are:
 
   - `clipboard-copy` (default: true) - Show a notification when text is copied
-```
     to the clipboard.
-```
   - `config-reload` (default: true) - Show a notification when
-```
     the configuration is reloaded.
-```
 
 To specify a notification to enable, specify the name of the notification.
 To specify a notification to disable, prefix the name with `no-`. For
@@ -3762,22 +3531,15 @@ Allowable values are:
   * `true` - Use non-native macOS fullscreen, hide the menu bar
   * `false` - Use native macOS fullscreen
   * `visible-menu` - Use non-native macOS fullscreen, keep the menu bar
-```
     visible
-```
   * `padded-notch` - Use non-native macOS fullscreen, hide the menu bar,
-```
     but ensure the window is not obscured by the notch on applicable
     devices. The area around the notch will remain transparent currently,
     but in the future we may fill it with the window background color.
-```
 
 Changing this option at runtime works, but will only apply to the next
 time the window is made fullscreen. If a window is already fullscreen,
 it will retain the previous setting until fullscreen is exited.
-
-## macOS
-
 Default: `macos-non-native-fullscreen = false`
 
 
@@ -3874,9 +3636,7 @@ onto the Ghostty icon in the macOS dock.
 Valid values are:
 
   * `new-tab` - Create a new tab in the current window, or open
-```
     a new window if none exist.
-```
   * `window` - Create a new window unconditionally.
 
 The default value is `new-tab`.
@@ -3993,21 +3753,15 @@ Valid values:
 
  * `official` - Use the official Ghostty icon.
  * `blueprint`, `chalkboard`, `microchip`, `glass`, `holographic`,
-```
    `paper`, `retro`, `xray` - Official variants of the Ghostty icon
    hand-created by artists (no AI).
-```
  * `custom` - Use a completely custom icon. The location must be specified
-```
    using the additional `macos-custom-icon` configuration
-```
  * `custom-style` - Use the official Ghostty icon but with custom
-```
    styles applied to various layers. The custom styles must be
    specified using the additional `macos-icon`-prefixed configurations.
    The `macos-icon-ghost-color` and `macos-icon-screen-color`
    configurations are required for this style.
-```
 
 WARNING: The `custom-style` option is _experimental_. We may change
 the format of the custom styles in the future. We're still finalizing
@@ -4016,11 +3770,9 @@ the exact layers and customization options that will be available.
 Other caveats:
 
   * The icon in the update dialog will always be the official icon.
-```
     This is because the update dialog is managed through a
     separate framework and cannot be customized without significant
     effort.
-```
 Default: `macos-icon = official`
 
 
@@ -4116,9 +3868,7 @@ Valid values are:
   * `never` - Never use cgroups.
   * `always` - Always use cgroups.
   * `single-instance` - Enable cgroups only for Ghostty instances launched
-```
     as single-instance applications (see gtk-single-instance).
-```
 Default: `linux-cgroup = never`
 
 
@@ -4226,9 +3976,7 @@ Valid values are:
  * `flat` - Top and bottom bars are flat with the terminal window.
  * `raised` - Top and bottom bars cast a shadow on the terminal area.
  * `raised-border` - Similar to `raised` but the shadow is replaced with a
-```
    more subtle border.
-```
 Default: `gtk-toolbar-style = raised`
 
 
@@ -4261,9 +4009,7 @@ GTK CSS documentation can be found at the following links:
 
   * https://docs.gtk.org/gtk4/css-overview.html - An overview of GTK CSS.
   * https://docs.gtk.org/gtk4/css-properties.html - A comprehensive list
-```
     of supported CSS properties.
-```
 
 Launch Ghostty with `env GTK_DEBUG=interactive ghostty` to tweak Ghostty's
 CSS in real time using the GTK Inspector. Errors in your CSS files would
@@ -4343,9 +4089,7 @@ The choice of backend is more about compatibility and features.
 Available options:
 
   * `auto` - Automatically choose the best backend for the platform
-```
     based on available options.
-```
   * `epoll` - Use the `epoll` API
   * `io_uring` - Use the `io_uring` API
 
@@ -4376,13 +4120,9 @@ Valid values are:
 
  * `off` - Disable auto-updates.
  * `check` - Check for updates and notify the user if an update is
-```
    available, but do not automatically download or install the update.
-```
  * `download` - Check for updates, automatically download the update,
-```
    notify the user, but do not automatically install the update.
-```
 
 If unset, we defer to Sparkle's default behavior, which respects the
 preference stored in the standard user defaults (`defaults(1)`).
@@ -4403,16 +4143,12 @@ Valid values are:
 
  * `stable` - Stable, tagged releases such as "1.0.0".
  * `tip` - Pre-release versions generated from each commit to the
-```
    main branch. This is the version that was in use during private
    beta testing by thousands of people. It is generally stable but
    will likely have more bugs than the stable channel.
-```
 
 Changing this configuration requires a full restart of
 Ghostty to take effect.
 
 This only works on macOS since only macOS has an auto-update feature.
 Default: `auto-update-channel = `
-
-
