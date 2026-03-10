@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-"""Regenerate the Config Reference section of CLAUDE.md from ghostty defaults."""
+"""Regenerate CONFIG_REFERENCE.md from ghostty defaults."""
 
-import re
 import subprocess
 import sys
 from pathlib import Path
 
-CLAUDE_MD = Path(__file__).parent / "CLAUDE.md"
+CONFIG_REF_MD = Path(__file__).parent / "CONFIG_REFERENCE.md"
 SEPARATOR = "---\n"
 
 
@@ -98,16 +97,16 @@ def main() -> None:
     raw = get_ghostty_docs()
     new_content = transform(raw)
 
-    text = CLAUDE_MD.read_text()
+    text = CONFIG_REF_MD.read_text()
     sep_index = text.find(SEPARATOR)
     if sep_index == -1:
-        print(f"Could not find separator '{SEPARATOR.strip()}' in {CLAUDE_MD}", file=sys.stderr)
+        print(f"Could not find separator '{SEPARATOR.strip()}' in {CONFIG_REF_MD}", file=sys.stderr)
         sys.exit(1)
 
     header = text[: sep_index + len(SEPARATOR)]
     updated = header + "\n" + new_content.strip() + "\n"
-    CLAUDE_MD.write_text(updated)
-    print(f"Updated {CLAUDE_MD}")
+    CONFIG_REF_MD.write_text(updated)
+    print(f"Updated {CONFIG_REF_MD}")
 
 
 if __name__ == "__main__":
