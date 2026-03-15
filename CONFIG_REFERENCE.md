@@ -510,6 +510,9 @@ Ghostty "share" directory.
 
 To see a list of available themes, run `ghostty +list-themes`.
 
+For built-in themes, you can also view the theme list online at
+iterm2-color-schemes. This also includes a preview of each theme.
+
 A theme file is simply another Ghostty configuration file. They share
 the same syntax and same configuration options. A theme can set any valid
 configuration option so please do not use a theme file from an untrusted

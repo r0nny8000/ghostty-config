@@ -18,7 +18,7 @@ Current settings in `config`:
 shell-integration-features = no-cursor
 font-family = "0xProto Nerd Font Mono"
 font-size = 14
-background = 323232
+theme = dark:Catppuccin Frappe
 cursor-style = block
 cursor-style-blink
 ```
