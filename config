@@ -5,6 +5,8 @@ shell-integration-features = no-cursor
 font-family = "0xProto Nerd Font Mono"
 font-size = 14
 
-theme = GitHub Dark Default
+theme = TokyoNight Night
 cursor-style = block
-cursor-style-blink 
+cursor-style-blink
+
+scrollback-limit = 134217728
